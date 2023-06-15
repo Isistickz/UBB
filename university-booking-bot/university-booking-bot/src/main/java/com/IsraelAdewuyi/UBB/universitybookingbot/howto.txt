@@ -1,0 +1,18 @@
+-------How to create inline buttons in Telegram-------
+InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+List<List<InlineKeyboardButton>> rowsInlinee = new ArrayList<>();
+
+1. Create a row with bottons
+List<InlineKeyboardButton> rowInline = new ArrayList<>();
+
+2. Create a list of bottons and set the text and call back...?
+InlineKeyboardButton newKey = new InlineKeyboardButton();
+
+newKey.setText(String);
+newKey.setCallbackData(String);
+rowInline.add(newKey);
+rowsInlinee.add(rowInline);
+
+keyboardMarkup.setKeyboard(rowsInlinee);
+
+sendMessage.setReplyMarkup(keyboardMarkup);
