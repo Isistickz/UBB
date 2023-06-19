@@ -1,0 +1,33 @@
+-------How to create inline buttons in Telegram-------
+InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+List<List<InlineKeyboardButton>> rowsInlinee = new ArrayList<>();
+
+1. Create a row with bottons
+List<InlineKeyboardButton> rowInline = new ArrayList<>();
+
+2. Create a list of bottons and set the text and call back...?
+InlineKeyboardButton newKey = new InlineKeyboardButton();
+
+newKey.setText(String);
+newKey.setCallbackData(String);
+rowInline.add(newKey);
+rowsInlinee.add(rowInline);
+
+keyboardMarkup.setKeyboard(rowsInlinee);
+
+sendMessage.setReplyMarkup(keyboardMarkup);
+
+
+------------ MVP -----------
+Date and time feature
+Book room feature
+Remove all the redundant text
+Authorization
+
+
+------ Nice to have ---------
+swagger generators
+filter by capacity
+No limit in advanced
+Notifications
+Confirmation of active bookinng (Scheduling messages for Telegram Bot) Quartz, ChromeJon library
