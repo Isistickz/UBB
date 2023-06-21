@@ -1,6 +1,6 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Booking;
 
-import com.IsraelAdewuyi.UBB.universitybookingbot.Booking.springdatajpa.BookingRepository;
+import com.IsraelAdewuyi.UBB.universitybookingbot.Repository.BookingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Service;

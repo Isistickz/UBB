@@ -17,6 +17,13 @@ keyboardMarkup.setKeyboard(rowsInlinee);
 
 sendMessage.setReplyMarkup(keyboardMarkup);
 
+---------- TO_DO ------------
+1. In the callback query,if a student fetched from DB is empty, what to do?
+2. Studentservice... getStudentById
+3. Authenticate the users... make sure only users that are students can use the bot
+    or launch any command asides the start
+4. When I place a booking and it shows the available rooms, pressing twice places two
+    bookings in the DB.
 
 ------------ MVP -----------
 Date and time feature
@@ -30,4 +37,4 @@ swagger generators
 filter by capacity
 No limit in advanced
 Notifications
-Confirmation of active bookinng (Scheduling messages for Telegram Bot) Quartz, ChromeJon library
+Confirmation of active booking (Scheduling messages for Telegram Bot) Quartz, ChromeJon library
