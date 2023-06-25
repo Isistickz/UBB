@@ -56,7 +56,15 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 		</dependency>
-<!--		<dependency>-->
+		<!-- https://mvnrepository.com/artifact/com.github.lgooddatepicker/LGoodDatePicker -->
+		<dependency>
+			<groupId>com.github.lgooddatepicker</groupId>
+			<artifactId>LGoodDatePicker</artifactId>
+			<version>11.2.1</version>
+		</dependency>
+
+
+		<!--		<dependency>-->
 <!--			<groupId>org.apache.logging</groupId>-->
 <!--			<artifactId>logging-parent</artifactId>-->
 <!--			<version>8</version>-->

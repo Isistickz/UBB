@@ -1,6 +1,7 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Service;
 
 import com.IsraelAdewuyi.UBB.universitybookingbot.Actions.ValidateTimeSlot;
+import com.IsraelAdewuyi.UBB.universitybookingbot.Commands.CancelCommandReceived;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Configuration.BotConfiguration;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Controller.BookingController;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Booking;
@@ -13,16 +14,20 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Component
 public class TelegramBot extends TelegramLongPollingBot {
+    private HashMap<Long, String> listOfCommands = new HashMap<>();
     final BotConfiguration botConfiguration;
 
     @Autowired
@@ -54,15 +59,6 @@ public class TelegramBot extends TelegramLongPollingBot {
             SendMessage response = new SendMessage();
             response.setChatId(chatId);
 
-            /*
-                This section is playing with the message in the callbackquery.
-
-                SendMessage play = new SendMessage();
-                play.setChatId(chatId);
-                play.setText(update.getCallbackQuery().getData());
-                sendMessage(play);
-             */
-
 
             switch (key) {
                 case "BO_TM":
@@ -88,10 +84,29 @@ public class TelegramBot extends TelegramLongPollingBot {
                     Booking booking = new Booking(updid, student, room, startTime, endTime);
                     Booking newBooking = bookingController.createBooking(booking);
                     response.setText("You have successfully booked Room " + room.getRoomName());
+                    sendMessage(response);
+                    break;
+                case "BO_RM":
+                    SendMessage message = new SendMessage();
+                    message.setText("Enter the date \nFormat is YYYY:MM:DD");
+                    message.setChatId(chatId);
+                    sendMessage(message);
+                    break;
+                case "CANCL":
+                    Long value = Long.parseLong(callbackData.substring(6));
+                    bookingController.deleteBooking(value);
+                    SendMessage message1 = new SendMessage();
+                    message1.setChatId(chatId);
+                    message1.setText("Booking successfully cancelled");
+                    sendMessage(message1);
+                default:
+                    System.out.println("Fuck off");
+
             }
 
-            sendMessage(response);
-        } else if (update.hasMessage() && update.getMessage().hasText()) {
+//            sendMessage(response);
+        }
+        else if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
 
             long chatID = update.getMessage().getChatId();
@@ -117,59 +132,86 @@ public class TelegramBot extends TelegramLongPollingBot {
                     viewCommandReceived(chatID, firstName, lastName);
                     break;
                 case "/book_by_time":
+                    listOfCommands.remove(chatID);
                     bookCommandReceived(chatID, firstName, lastName);
                     break;
                 case "/book_by_room":
-                    
+                    bookByRoomCommandRecived(chatID);
                     break;
                 default:
-                    boolean validTimeSlot = validateTimeSlot(messageText);
-                    if (validTimeSlot) {
-                        String[] parts = messageText.split(" - ");
-                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    if (messageText.length() == 10) {
+                        listOfCommands.put(chatID, messageText);
+                        SendMessage newMessage = new SendMessage();
+                        newMessage.setChatId(chatID);
+                        newMessage.setText("Enter the start and end time \nFormate is HH:MM - HH:MM");
+                        sendMessage(newMessage);
 
-                        LocalDateTime startDateTime = LocalDateTime.parse(parts[0], formatter);
-                        LocalDateTime endDateTime = LocalDateTime.parse(parts[1], formatter);
-
-                        String formattedDateTime = startDateTime.format(formatter);
-                        String formattedEndTime = endDateTime.format(formatter);
-
-
-                        List<Room> result = bookingController.getAvailableRooms(
-                                startDateTime,
-                                endDateTime);
-
-                        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-                        List<List<InlineKeyboardButton>> rowsInlinee = new ArrayList<>();
-
-                        for (Room room : result) {
-                            List<InlineKeyboardButton> rowInline = new ArrayList<>();
-                            InlineKeyboardButton newKey = new InlineKeyboardButton();
-                            String roomName = room.getRoomName() + " x" + room.getCapacity();
-                            newKey.setText(roomName);
-                            newKey.setCallbackData("BO_TM "
-                                    + room.getRoomName()
-                                    + " "
-                                    + formattedDateTime
-                                    + " "
-                                    + formattedEndTime
-                            );
-                            rowInline.add(newKey);
-                            rowsInlinee.add(rowInline);
+                    }
+                    else if (messageText.length() == 13) {
+                        String[] time = messageText.split(" - ");
+                        if (time.length != 2) {
+                            unvalidatedCommandReceived(chatID);
+                            return;
                         }
 
-                        keyboardMarkup.setKeyboard(rowsInlinee);
 
-                        SendMessage sendMessage = new SendMessage();
-                        sendMessage.setChatId(chatID);
-                        sendMessage.setText("These are the available rooms: ");
-                        sendMessage.setReplyMarkup(keyboardMarkup);
+                        String startDate = listOfCommands.get(chatID) + " " + time[0];
+                        String endDate = listOfCommands.get(chatID) + " " + time[1];
 
-                        sendMessage(sendMessage);
+                        listOfCommands.remove(chatID);
+
+                        String timeDuration = startDate + " - " + endDate;
+                        System.out.println(timeDuration);
+
+                        boolean validTimeSlot = validateTimeSlot(timeDuration);
+
+                        if (validTimeSlot) {
+                            String[] parts = timeDuration.split(" - ");
+                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+                            LocalDateTime startDateTime = LocalDateTime.parse(parts[0], formatter);
+                            LocalDateTime endDateTime = LocalDateTime.parse(parts[1], formatter);
+
+                            String formattedDateTime = startDateTime.format(formatter);
+                            String formattedEndTime = endDateTime.format(formatter);
+
+
+                            List<Room> result = bookingController.getAvailableRooms(
+                                    startDateTime,
+                                    endDateTime);
+
+                            InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+                            List<List<InlineKeyboardButton>> rowsInlinee = new ArrayList<>();
+
+                            for (Room room : result) {
+                                List<InlineKeyboardButton> rowInline = new ArrayList<>();
+                                InlineKeyboardButton newKey = new InlineKeyboardButton();
+                                String roomName = room.getRoomName() + " x" + room.getCapacity();
+                                newKey.setText(roomName);
+                                newKey.setCallbackData("BO_TM "
+                                        + room.getRoomName()
+                                        + " "
+                                        + formattedDateTime
+                                        + " "
+                                        + formattedEndTime
+                                );
+                                rowInline.add(newKey);
+                                rowsInlinee.add(rowInline);
+                            }
+
+                            keyboardMarkup.setKeyboard(rowsInlinee);
+
+                            SendMessage sendMessage = new SendMessage();
+                            sendMessage.setChatId(chatID);
+                            sendMessage.setText("These are the available rooms: ");
+                            sendMessage.setReplyMarkup(keyboardMarkup);
+
+                            sendMessage(sendMessage);
+                        } else {
+                            invalidCommandReceived(chatID);
+                        }
                     } else {
-                        String messageReply = "You have entered an unrecognized command.";
-                        SendMessage message = new SendMessage(String.valueOf(chatID), messageReply);
-                        sendMessage(message);
+                        invalidCommandReceived(chatID);
                     }
             }
 
@@ -192,35 +234,40 @@ public class TelegramBot extends TelegramLongPollingBot {
         sendMessage(chatID, answer);
 
     }
-
     private void cancelCommandReceived(long chatID, String firstName, String lastName) {
         String reply = firstName + ", are you sure you want to cancel your room reservation? If yes, pick a time slot";
 
-//        List<Booking> bookings =  bookingService.getBookingsByRoomId(301l);
+        Student student = bookingController.getStudentByFirstName(firstName);
+        long id = student.getId();
 
-//        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
-//        List<List<InlineKeyboardButton>> rowsInlinee = new ArrayList<>();
-//
-//        for(Booking book : bookings){
-//            List<InlineKeyboardButton> rowInline = new ArrayList<>();
-//            InlineKeyboardButton newKey = new InlineKeyboardButton();
-//            String time = book.getStartTime() + " - " +  book.getEndTime() + " at " + book.getRoomId();
-//            newKey.setText(time);
-//            newKey.setCallbackData(time);
-//            rowInline.add(newKey);
-//            rowsInlinee.add(rowInline);
-//        }
-//
-//        keyboardMarkup.setKeyboard(rowsInlinee);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        List<Booking> bookingList = bookingController.getBookingsByStudent(id);
+
+        InlineKeyboardMarkup keyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInlinee = new ArrayList<>();
+
+        for (Booking booking : bookingList) {
+            List<InlineKeyboardButton> rowInline = new ArrayList<>();
+            InlineKeyboardButton newKey = new InlineKeyboardButton();
+            String roomName = booking.getStartTime().format(formatter)
+                    + " at "
+                    + booking.getRoom().getRoomName();
+            newKey.setText(roomName);
+            newKey.setCallbackData("CANCL " + booking.getId());
+            rowInline.add(newKey);
+            rowsInlinee.add(rowInline);
+        }
+
+        keyboardMarkup.setKeyboard(rowsInlinee);
 
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatID);
         sendMessage.setText(reply);
-//        sendMessage.setReplyMarkup(keyboardMarkup);
+        sendMessage.setReplyMarkup(keyboardMarkup);
 
         sendMessage(sendMessage);
     }
-
     private void viewCommandReceived(long chatID, String firstName, String lastName) {
         Student student = bookingController.getStudentByFirstName(firstName);
         long id = student.getId();
@@ -253,13 +300,41 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         sendMessage(sendMessage);
     }
-
     private void bookCommandReceived(long chatID, String firstName, String lastName) {
         SendMessage message = new SendMessage(String.valueOf(chatID),
-                "Please enter the date and time in the format \n'YYYY-MM-DD HH:MM - YYYY-MM-DD HH:MM'");
+                "Please enter the date in the format \n'YYYY-MM-DD'");
+
         sendMessage(message);
     }
+    private void bookByRoomCommandRecived(long chatID) {
+        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowOfButtons = new ArrayList<>();
+        List<InlineKeyboardButton> singleRow = new ArrayList<>();
+        List<Room> roomList = bookingController.getAllRooms();
+        int count = 3;
+        for (Room room : roomList) {
+            count++;
+            InlineKeyboardButton newRow = new InlineKeyboardButton();
+            newRow.setText(room.getRoomName());
+            newRow.setCallbackData("BO_RM " + room.getRoomName());
+            singleRow.add(newRow);
 
+            if (count % 3 == 0 || count == roomList.size()) {
+                rowOfButtons.add(singleRow);
+                singleRow = new ArrayList<InlineKeyboardButton>();
+            }
+
+        }
+
+//        rowOfButtons.add(singleRow);
+        inlineKeyboardMarkup.setKeyboard(rowOfButtons);
+        SendMessage replyMessage = new SendMessage();
+        replyMessage.setReplyMarkup(inlineKeyboardMarkup);
+        replyMessage.setText("Choose your favorite room: ");
+        replyMessage.setChatId(chatID);
+
+        sendMessage(replyMessage);
+    }
     private void unvalidatedCommandReceived(long chatID) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatID);
@@ -267,7 +342,12 @@ public class TelegramBot extends TelegramLongPollingBot {
                 "We do not know each other yet. Contact @AdewuyiIsrael to get access");
         sendMessage(sendMessage);
     }
-
+    private void invalidCommandReceived(long chatID){
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setText("You have entered an unrecognized command");
+        sendMessage.setChatId(chatID);
+        sendMessage(sendMessage);
+    }
     private void sendMessage(long chatID, String textToSend) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatID);
@@ -279,12 +359,12 @@ public class TelegramBot extends TelegramLongPollingBot {
 
         }
     }
-
     private void sendMessage(SendMessage message) {
         try {
             execute(message);
         } catch (TelegramApiException e) {
 
         }
+
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Book;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -26,10 +27,6 @@ public class BookingService {
 
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
-    }
-
-    public Optional<Booking> getBookingById(Long id) {
-        return bookingRepository.findById(id);
     }
 
     public Booking saveBooking(Booking booking) {
@@ -72,4 +69,9 @@ public class BookingService {
     public List<Booking> getBookingsByStudent(Student student) {
         return bookingRepository.findByStudent(student);
     }
+
+    public List<Booking> getBookingsByDate(LocalDate date) {
+        return bookingRepository.getBookingsByDate(date);
+    }
+
 }

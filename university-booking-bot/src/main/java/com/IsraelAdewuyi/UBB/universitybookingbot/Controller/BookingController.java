@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,14 +43,14 @@ public class BookingController {
 
         studentService.saveStudent(new Student(3L,
                 "Israel", "Adewuyi", "fuckoff"));
-//        studentService.saveStudent(new Student(4L,
-//                "Arthur", "Gubaidullin", "fuckoff"));
+        studentService.saveStudent(new Student(4L,
+                "Arthur", "Gubaidullin", "fuckoff"));
 //        studentService.saveStudent(new Student(5L,
 //                "Rodion", "isARussian", "fuckoff"));
-//        studentService.saveStudent(new Student(6L,
-//                "Apollinaria", "Chernikova", "fuckoff"));
-//        studentService.saveStudent(new Student(7L,
-//                "dinara", "murtazina", "fuckoff"));
+        studentService.saveStudent(new Student(6L,
+                "Apollinaria", "Chernikova", "fuckoff"));
+        studentService.saveStudent(new Student(7L,
+                "dinara", "murtazina", "fuckoff"));
     }
 
     @GetMapping("/users")
@@ -104,5 +105,9 @@ public class BookingController {
     public List<Booking> getBookingsByStudent(@PathVariable Long studentId) {
         Student student = studentService.getStudentById(studentId); // Assuming you have a method to retrieve a student by ID
         return bookingService.getBookingsByStudent(student);
+    }
+
+    public List<Booking> getBookingsByDate(LocalDate date){
+        return bookingService.getBookingsByDate(date);
     }
 }
