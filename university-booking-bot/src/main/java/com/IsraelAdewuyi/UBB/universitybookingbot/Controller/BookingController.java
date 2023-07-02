@@ -6,11 +6,15 @@ import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Student;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Service.BookingService;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Service.RoomService;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Service.StudentService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+//import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +22,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Controller
 @RestController
-@RequestMapping("/bookings")
+@RequestMapping("/")
 public class BookingController {
     private final StudentService studentService;
     private final RoomService roomService;
@@ -69,7 +74,7 @@ public class BookingController {
     }
 
     @PostMapping("/bookings")
-    public Booking createBooking(Booking booking) {
+    public Booking createBooking(@RequestBody Booking booking) {
         return bookingService.saveBooking(booking);
     }
 
@@ -83,7 +88,8 @@ public class BookingController {
         return "This API endpoint works";
     }
 
-    public List<Room> getAvailableRooms(LocalDateTime startTime, LocalDateTime endTime) {
+    @GetMapping("/available-rooms")
+    public List<Room> getAvailableRooms(@PathVariable LocalDateTime startTime, @PathVariable LocalDateTime endTime) {
         return bookingService.getAvailableRooms(startTime, endTime);
     }
 
@@ -97,6 +103,7 @@ public class BookingController {
 //        return studentService.getStudentByFirstName(firstName);
 //    }
 
+    @GetMapping("/rooms/{roomName}")
     public Room getRoomByRoomName(@PathVariable String roomName) {
         return roomService.getRoomByRoomName(roomName);
     }

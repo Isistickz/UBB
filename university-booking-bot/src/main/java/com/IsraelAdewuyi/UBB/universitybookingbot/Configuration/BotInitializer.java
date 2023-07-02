@@ -1,6 +1,6 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Configuration;
 
-import com.IsraelAdewuyi.UBB.universitybookingbot.Service.TelegramBot;
+import com.IsraelAdewuyi.UBB.universitybookingbot.Core.TelegramBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
