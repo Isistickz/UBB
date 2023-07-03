@@ -15,9 +15,9 @@ public class ValidateTimeSlot {
             return "invalid";
         }
 
-        System.out.println("Got here");
+        System.out.println("Got here " + parts[0] + " " + parts[1]);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd HH:mm");
 
         try {
             LocalDateTime startDateTime = LocalDateTime.parse(parts[0], formatter);

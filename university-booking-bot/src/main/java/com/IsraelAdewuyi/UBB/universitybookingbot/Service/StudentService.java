@@ -41,5 +41,9 @@ public class StudentService {
         return studentRepository.findById(studentId)
                 .orElseThrow(() -> new NoSuchElementException("Student not found with ID: " + studentId));
     }
+
+    public Student getStudentWithTelegramID(String telegramID){
+        return studentRepository.findByTelegramID(telegramID);
+    }
 }
 

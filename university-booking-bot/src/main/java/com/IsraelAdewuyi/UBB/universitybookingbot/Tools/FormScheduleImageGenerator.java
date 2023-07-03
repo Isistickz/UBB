@@ -5,7 +5,6 @@ import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Booking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.DefaultUriBuilderFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -18,11 +17,10 @@ import java.awt.font.TextLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -31,7 +29,8 @@ import java.util.List;
 public class FormScheduleImageGenerator {
     @Autowired
     private BookingController bookingController;
-    public FileInputStream formScheduleImage(LocalDate date) throws IOException {
+
+    public FileInputStream formScheduleImage(LocalDate date, String roomName) throws IOException {
         // Constants for schedule layout
         int xbase = 48;
         int ybase = 73;
@@ -39,7 +38,8 @@ public class FormScheduleImageGenerator {
         int ysize = 32;
 
         // Load base image
-        File imageFile = new File("C:\\Users\\isist\\Documents\\Java_Programs\\university-booking-bot\\university-booking-bot\\src\\main\\java\\com\\IsraelAdewuyi\\UBB\\universitybookingbot\\to_paint_form1280.png");
+        File imageFile = new File(
+                "C:\\Users\\isist\\Documents\\Java_Programs\\university-booking-bot\\university-booking-bot\\src\\main\\java\\com\\IsraelAdewuyi\\UBB\\universitybookingbot\\to_paint_form1280.png");
         Image image = ImageIO.read(imageFile);
         BufferedImage bufferedImage = new BufferedImage(image.getWidth(null), image.getHeight(null),
                 BufferedImage.TYPE_INT_RGB);
@@ -50,26 +50,24 @@ public class FormScheduleImageGenerator {
         // Colors, brushes, and fonts
         Color lightGreen = new Color(123, 209, 72);
         Color lightGray = Color.lightGray;
-        Color payerColor = lightGreen;
-        Color requesterColor = Color.BLUE;
-        Color bookingColor;
-        Color red = Color.red;
-        Color black = Color.black;
+//        Color requesterColor = Color.BLUE;
+//        Color bookingColor;
+//        Color red = Color.red;
+//        Color black = Color.black;
         Font fontSimple = new Font(Font.SANS_SERIF, Font.PLAIN, 10);
-        Font fontBold = new Font(Font.SANS_SERIF, Font.BOLD, 10);
+//        Font fontBold = new Font(Font.SANS_SERIF, Font.BOLD, 10);
 
         // Retrieve bookings for the week
-        List<Booking> bookings = bookingController.getBookingsByDate(date);
+        List<Booking> bookings = bookingController.getBookingsByRoomAndDate(roomName, date);
+
+        System.out.println("I got here " + bookings.size());
 
         // Iterate over bookings
         for (Booking booking : bookings) {
-//            Font currentFont = booking.getUser().getEmail()
-//            Font currentFont = booking.getParticipant().getAlias().equals(participant.getAlias()) ? fontBold : fontSimple;
-
-//            bookingColor = booking.getParticipant().getStatus().equals("free") ? lightGray : payerColor;
-
 //            int day = BookCommand.dayOfWeekInt(booking.getTimeStart());
-            int day = 1;
+            DayOfWeek dayOfWeek = date.getDayOfWeek();
+            int day = dayOfWeek.getValue();
+            day--;
             Duration duration = Duration.between(booking.getStartTime(), booking.getEndTime());
             long minutes = duration.toMinutes();
             int ylength = (int) (ysize * (minutes / 60f));
@@ -81,28 +79,17 @@ public class FormScheduleImageGenerator {
             graphics.fillRect(xcorner, ycorner, xsize - 10, ylength - 5);
 
             String caption = booking.getUser().getEmail();
-//            if (booking.getEndTime().subtract(booking.getTimeStart()).toHours() > 1) {
-//                caption += "\n";
-//            } else {
-//                caption += " ";
-//            }
+            caption += " \n\n ";
             caption += booking.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm")) + " "
-                    + booking.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+                    + booking.getEndTime().format(DateTimeFormatter.ofPattern("HH:mm"));
 
-            graphics.setColor(black);
+            graphics.setColor(Color.BLACK);
             graphics.setFont(fontSimple);
             drawString(graphics, caption, xcorner + 2, ycorner + 2);
 
             // Unused string: String bookingDetails = String.format("%s %s %s\n", booking.getParticipant().getAlias(),
             // booking.getTimeStart(), booking.getTimeEnd());
         }
-
-//        // Highlight current time
-//        int nowxcorner = xbase + xsize * BookCommand.dayOfWeekInt(LocalDate.now());
-//        int nowycorner = (int) (ybase + ysize * ((LocalDateTime.now().getHour() - 7 + 3)
-//                + (LocalDateTime.now().getMinute() / 60f)));
-//        graphics.setColor(red);
-//        graphics.fillRect(nowxcorner, nowycorner, xsize, 2);
 
         // Save modified image
         File resultFile = new File("result.png");

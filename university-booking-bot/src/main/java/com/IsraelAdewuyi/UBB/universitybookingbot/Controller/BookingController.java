@@ -47,15 +47,23 @@ public class BookingController {
         roomService.saveRoom(new Room(10l, "320", 28));
 
         studentService.saveStudent(new Student(3L,
-                "Israel", "Adewuyi", "fuckoff"));
+                "Israel", "Adewuyi", "i.adewuyi@innopolis.university", "AdewuyiIsrael"));
         studentService.saveStudent(new Student(4L,
-                "Arthur", "Gubaidullin", "fuckoff"));
+                "Arthur", "Gubaidullin", "a.gubaidullin@innopolis.university", "V11P3R"));
 //        studentService.saveStudent(new Student(5L,
 //                "Rodion", "isARussian", "fuckoff"));
         studentService.saveStudent(new Student(6L,
-                "Apollinaria", "Chernikova", "fuckoff"));
+                "Apollinaria", "Chernikova", "a.chernikova@innopolis.university", "Apollinaria2004"));
         studentService.saveStudent(new Student(7L,
-                "dinara", "murtazina", "fuckoff"));
+                "dinara", "murtazina", "d.murtazina@innopolis.university", "cucumur"));
+        studentService.saveStudent(new Student(8L,
+                "Chulpan", "Valiullina", "c.valiullina@innopolis.university", "Chehmet"));
+        studentService.saveStudent(new Student(9L,
+                "Руфина","Gafiatullina", "r.gafiatullina@innopolis.university", "R_ufina" ));
+        studentService.saveStudent(new Student(9L,
+                "AbdelRahman", "Abounegm", "a.abounegm@innopolis.university", "aabounegm"));
+        studentService.saveStudent(new Student(10L,
+                "Milyausha", "isArussian", "m.isARussian@innopolis.university", "mili_sham"));
     }
 
     @GetMapping("/users")
@@ -116,5 +124,17 @@ public class BookingController {
 
     public List<Booking> getBookingsByDate(LocalDate date){
         return bookingService.getBookingsByDate(date);
+    }
+
+    public List<Booking> getBookingsByRoomAndDate(String roomName, LocalDate date){
+        return bookingService.getBookingsByRoomAndDate(roomName, date);
+    }
+
+    public Student getStudentByTelegramID(String telegramID){
+        return studentService.getStudentWithTelegramID(telegramID);
+    }
+
+    public boolean isBookingUnique(String roomName, LocalDateTime startTime, LocalDateTime endTime){
+        return bookingService.isBookingConflict(roomName, startTime, endTime);
     }
 }
