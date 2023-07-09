@@ -1,0 +1,49 @@
+# .gitlab-ci.yml (for GitLab CI/CD)
+# This script assumes you're using GitLab CI/CD, but you can adapt it for other CI/CD platforms.
+
+variables:
+  SONAR_TOKEN: "sqp_ddd17c2505e8f7867fbd89e9e10832a125994da7"
+  SONAR_HOST_URL: "http://localhost:9000"
+  SONAR_PROJECT_KEY: "<sonarqube_project_key>"
+  SONAR_PROJECT_NAME: "<sonarqube_project_name>"
+  SONAR_PROJECT_VERSION: "<sonarqube_project_version>"
+
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  image: maven:3.8.3-openjdk-17-slim
+  script:
+    - cd university-booking-bot
+    - mvn clean package -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - target/*.jar
+
+test:
+  stage: test
+  image: maven:3.8.3-openjdk-17-slim
+  script:
+    - cd university-booking-bot
+    - mvn test
+
+sonarqube-check:
+  image: maven:3.8.3-openjdk-17-slim
+  variables:
+    SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+    GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script: 
+    - cd university-booking-bot
+    - mvn verify sonar:sonar -Dsonar.projectKey=university-booking-bot -Dsonar.projectName='university-booking-bot'
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'main'
+
+
