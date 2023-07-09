@@ -20,6 +20,7 @@ test:
   stage: test
   image: maven:3.8.3-openjdk-17-slim
   script:
+    - cd university-booking-bot
     - mvn test
 
 deploy:
