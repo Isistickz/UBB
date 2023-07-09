@@ -4,7 +4,6 @@
 stages:
   - build
   - test
-  - deploy
 
 build:
   stage: build
@@ -23,8 +22,3 @@ test:
     - cd university-booking-bot
     - mvn test
 
-deploy:
-  stage: deploy
-  image: maven:3.8.3-openjdk-17-slim
-  script:
-    - java -jar target/*.jar
