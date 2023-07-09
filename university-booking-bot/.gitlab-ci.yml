@@ -1,0 +1,17 @@
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  image: maven:3.8.4-jdk-11
+  script:
+    - cd university-booking-bot
+    - mvn clean compile
+
+test:
+  stage: test
+  image: maven:3.8.4-jdk-11
+  script:
+    - cd university-booking-bot
+    - mvn test
