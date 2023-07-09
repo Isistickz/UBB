@@ -1,21 +1,28 @@
+# .gitlab-ci.yml (for GitLab CI/CD)
+# This script assumes you're using GitLab CI/CD, but you can adapt it for other CI/CD platforms.
+
 stages:
   - build
   - test
+  - deploy
 
 build:
   stage: build
-  image: openjdk:17-jdk
+  image: maven:3.8.3-openjdk-17-slim
   script:
-    - apk update
-    - apk add maven
-    - cd university-booking-bot
-    - mvn clean compile
+    - mvn clean package -Dmaven.test.skip=true
+  artifacts:
+    paths:
+      - target/*.jar
 
 test:
   stage: test
-  image: openjdk:17-jdk
+  image: maven:3.8.3-openjdk-17-slim
   script:
-    - apk update
-    - apk add maven
-    - cd university-booking-bot
     - mvn test
+
+deploy:
+  stage: deploy
+  image: adoptopenjdk:17-jre
+  script:
+    - java -jar target/*.jar
