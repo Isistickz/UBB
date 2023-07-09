@@ -34,8 +34,10 @@ public class BookingService {
     public void deleteBooking(Long id) {
         bookingRepository.deleteById(id);
     }
+
     public List<Room> getAvailableRooms(LocalDateTime startTime, LocalDateTime endTime) {
-        List<Booking> conflictingBookings = bookingRepository.findByStartTimeLessThanAndEndTimeGreaterThan(endTime, startTime);
+        List<Booking> conflictingBookings =
+                bookingRepository.findByStartTimeLessThanAndEndTimeGreaterThan(endTime, startTime);
 
         // Assuming you have a Room object associated with each Booking,
         // you can collect the available rooms by filtering out the conflicting bookings
@@ -56,7 +58,7 @@ public class BookingService {
         return bookingRepository.getBookingsByDate(date);
     }
 
-    public List<Booking> getBookingsByRoomAndDate(String roomName, LocalDate date){
+    public List<Booking> getBookingsByRoomAndDate(String roomName, LocalDate date) {
         return bookingRepository.getBookingsByRoomNameAndDate(roomName, date);
     }
 

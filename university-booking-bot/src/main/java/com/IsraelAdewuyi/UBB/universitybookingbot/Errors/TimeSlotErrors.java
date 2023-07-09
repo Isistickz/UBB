@@ -18,7 +18,7 @@ public class TimeSlotErrors extends DefaultAbsSender {
         execute(sendMessage);
     }
 
-    public void startTimeInvalid(long chatID) throws TelegramApiException{
+    public void startTimeInvalid(long chatID) throws TelegramApiException {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatID);
         sendMessage.setText("Students cannot book any time duration before 7pm");
@@ -26,14 +26,13 @@ public class TimeSlotErrors extends DefaultAbsSender {
         execute(sendMessage);
     }
 
-    public void startTimeBeforeEndTime(long chatID) throws TelegramApiException{
+    public void startTimeBeforeEndTime(long chatID) throws TelegramApiException {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatID);
         sendMessage.setText("Start time is before end time");
 
         execute(sendMessage);
     }
-
 
 
 //    TelegramBot myBot = new TelegramBot();

@@ -1,8 +1,5 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Actions;
 
-import com.IsraelAdewuyi.UBB.universitybookingbot.Models.Reservation;
-import jakarta.validation.constraints.Null;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -32,16 +29,15 @@ public class ValidateTimeSlot {
 
             boolean validStartTime = startDateTime.isAfter(currentTime) || startDateTime.isEqual(currentTime);
 
-            if(startDateTime.isBefore(endDateTime) && validStartTime){
+            if (startDateTime.isBefore(endDateTime) && validStartTime) {
                 return "valid";
-            }
-            else if(!validStartTime){
+            } else if (!validStartTime) {
                 return "curTime";
-            }
-            else if(!startDateTime.isBefore(endDateTime)){
+            } else if (!startDateTime.isBefore(endDateTime)) {
                 return "startTimeBeforeEndTime";
+            } else {
+                return "invalid";
             }
-            else return "invalid";
 
 //            return startDateTime.isBefore(endDateTime) && validStartTime;
         } catch (DateTimeParseException e) {

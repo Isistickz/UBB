@@ -1,8 +1,8 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Models.domain;
 
-import java.util.Objects;
-
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
+
+import java.util.Objects;
 
 public class MessageSend {
 

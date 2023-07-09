@@ -6,7 +6,6 @@ import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Student;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Service.BookingService;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Service.RoomService;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Service.StudentService;
-import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-//import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,15 +34,15 @@ public class BookingController {
         this.roomService = roomService;
         this.bookingService = bookingService;
 
-        roomService.saveRoom(new Room(2l, "301", 24));
-        roomService.saveRoom(new Room(4l, "303", 30));
-        roomService.saveRoom(new Room(5l, "304", 25));
-        roomService.saveRoom(new Room(6l, "305", 25));
-        roomService.saveRoom(new Room(7l, "312", 30));
-        roomService.saveRoom(new Room(8l, "313", 60));
-        roomService.saveRoom(new Room(9l, "314", 34));
-        roomService.saveRoom(new Room(20l, "318", 30));
-        roomService.saveRoom(new Room(10l, "320", 28));
+        roomService.saveRoom(new Room(2L, "301", 24));
+        roomService.saveRoom(new Room(4L, "303", 30));
+        roomService.saveRoom(new Room(5L, "304", 25));
+        roomService.saveRoom(new Room(6L, "305", 25));
+        roomService.saveRoom(new Room(7L, "312", 30));
+        roomService.saveRoom(new Room(8L, "313", 60));
+        roomService.saveRoom(new Room(9L, "314", 34));
+        roomService.saveRoom(new Room(20L, "318", 30));
+        roomService.saveRoom(new Room(10L, "320", 28));
 
         studentService.saveStudent(new Student(3L,
                 "Israel", "Adewuyi", "i.adewuyi@innopolis.university", "AdewuyiIsrael"));
@@ -59,7 +57,7 @@ public class BookingController {
         studentService.saveStudent(new Student(8L,
                 "Chulpan", "Valiullina", "c.valiullina@innopolis.university", "Chehmet"));
         studentService.saveStudent(new Student(9L,
-                "Руфина","Gafiatullina", "r.gafiatullina@innopolis.university", "R_ufina" ));
+                "Руфина", "Gafiatullina", "r.gafiatullina@innopolis.university", "R_ufina"));
         studentService.saveStudent(new Student(9L,
                 "AbdelRahman", "Abounegm", "a.abounegm@innopolis.university", "aabounegm"));
         studentService.saveStudent(new Student(10L,
@@ -118,23 +116,24 @@ public class BookingController {
 
     @GetMapping("/students/{studentId}")
     public List<Booking> getBookingsByStudent(@PathVariable Long studentId) {
-        Student student = studentService.getStudentById(studentId); // Assuming you have a method to retrieve a student by ID
+        Student student =
+                studentService.getStudentById(studentId); // Assuming you have a method to retrieve a student by ID
         return bookingService.getBookingsByStudent(student);
     }
 
-    public List<Booking> getBookingsByDate(LocalDate date){
+    public List<Booking> getBookingsByDate(LocalDate date) {
         return bookingService.getBookingsByDate(date);
     }
 
-    public List<Booking> getBookingsByRoomAndDate(String roomName, LocalDate date){
+    public List<Booking> getBookingsByRoomAndDate(String roomName, LocalDate date) {
         return bookingService.getBookingsByRoomAndDate(roomName, date);
     }
 
-    public Student getStudentByTelegramID(String telegramID){
+    public Student getStudentByTelegramID(String telegramID) {
         return studentService.getStudentWithTelegramID(telegramID);
     }
 
-    public boolean isBookingUnique(String roomName, LocalDateTime startTime, LocalDateTime endTime){
+    public boolean isBookingUnique(String roomName, LocalDateTime startTime, LocalDateTime endTime) {
         return bookingService.isBookingConflict(roomName, startTime, endTime);
     }
 }

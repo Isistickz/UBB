@@ -85,11 +85,11 @@ public class Student {
         this.email = email;
     }
 
-    public String getTelegramID(){
+    public String getTelegramID() {
         return telegramID;
     }
 
-    public void setTelegramID(String telegramID){
+    public void setTelegramID(String telegramID) {
         this.telegramID = telegramID;
     }
 

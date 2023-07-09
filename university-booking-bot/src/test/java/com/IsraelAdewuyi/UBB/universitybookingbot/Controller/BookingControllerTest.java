@@ -1,6 +1,5 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Controller;
 
-import com.IsraelAdewuyi.UBB.universitybookingbot.Controller.BookingController;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Booking;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Room;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Student;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class BookingControllerTest {
@@ -86,7 +84,7 @@ public class BookingControllerTest {
         Room room = new Room(1L, "301", 24);
         Room room2 = new Room(1L, "310", 24);
 
-        bookings.add(new Booking(1L, newStudent, room, LocalDateTime.now(), LocalDateTime.now().plusHours(2) ));
+        bookings.add(new Booking(1L, newStudent, room, LocalDateTime.now(), LocalDateTime.now().plusHours(2)));
         bookings.add(new Booking(2L, student2, room2, LocalDateTime.now(), LocalDateTime.now().plusHours(1)));
 
         when(bookingService.getAllBookings()).thenReturn(bookings);

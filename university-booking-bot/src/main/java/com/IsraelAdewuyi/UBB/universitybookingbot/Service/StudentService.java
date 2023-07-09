@@ -1,4 +1,5 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Service;
+
 import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Student;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class StudentService {
                 .orElseThrow(() -> new NoSuchElementException("Student not found with ID: " + studentId));
     }
 
-    public Student getStudentWithTelegramID(String telegramID){
+    public Student getStudentWithTelegramID(String telegramID) {
         return studentRepository.findByTelegramID(telegramID);
     }
 }

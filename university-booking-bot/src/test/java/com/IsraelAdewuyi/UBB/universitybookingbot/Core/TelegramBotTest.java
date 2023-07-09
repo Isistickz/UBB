@@ -2,42 +2,23 @@ package com.IsraelAdewuyi.UBB.universitybookingbot.Core;
 
 import com.IsraelAdewuyi.UBB.universitybookingbot.Configuration.BotConfiguration;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Controller.BookingController;
-import com.IsraelAdewuyi.UBB.universitybookingbot.Core.TelegramBot;
-import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Booking;
-import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Room;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Student;
-import com.IsraelAdewuyi.UBB.universitybookingbot.Errors.TimeSlotErrors;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Service.BookingService;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Service.RoomService;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Service.StudentService;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Tools.FormScheduleImageGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 public class TelegramBotTest {
     private TelegramBot telegramBot;
@@ -60,7 +41,8 @@ public class TelegramBotTest {
     @Mock
     private FormScheduleImageGenerator formScheduleImageGenerator;
 
-    private Update createTextMessageUpdate(long chatId, String firstName, String lastName, String userName, String text) {
+    private Update createTextMessageUpdate(long chatId, String firstName, String lastName, String userName,
+                                           String text) {
         Update update = new Update();
         Message message = new Message();
         message.setChat(createChat(chatId, firstName, lastName, userName));

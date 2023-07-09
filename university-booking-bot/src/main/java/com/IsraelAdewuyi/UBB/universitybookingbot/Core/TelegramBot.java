@@ -38,8 +38,8 @@ import java.util.regex.Pattern;
 @Component
 @Service
 public class TelegramBot extends TelegramLongPollingBot {
-    private HashMap<Long, String> listOfCommands = new HashMap<>();
-    private HashMap<Long, String> listOfRoomCommands = new HashMap<>();
+    private final HashMap<Long, String> listOfCommands = new HashMap<>();
+    private final HashMap<Long, String> listOfRoomCommands = new HashMap<>();
     final BotConfiguration botConfiguration;
     SendMessage lastSentMessage;
 
@@ -110,14 +110,13 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                     Booking booking = new Booking(updid, student, room, startTime, endTime);
 
-                    if(isAvailable){
+                    if (isAvailable) {
                         Booking newBooking = bookingController.createBooking(booking);
 
                         String textToSend = "You have successfully booked Room " + room.getRoomName();
                         sendReplyWithUpdatedKeyboard(callbackQuery, textToSend);
                         viewCommandReceived(chatId, student.getTelegramID(), student.getLastName());
-                    }
-                    else{
+                    } else {
                         sendMessage(chatId, "The time you entered conflicts with " +
                                 "other bookings.");
                     }
@@ -139,8 +138,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     System.out.println("Fuck off");
 
             }
-        }
-        else if (update.hasMessage() && update.getMessage().hasText()) {
+        } else if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
 
             long chatID = update.getMessage().getChatId();
@@ -188,7 +186,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                     Matcher dateMatcher = dateRegex.matcher(messageText);
 
                     if (dateMatcher.matches()) {
-                        if(listOfRoomCommands.containsKey(chatID)){
+                        if (listOfRoomCommands.containsKey(chatID)) {
                             String newText = "2023-";
                             String[] text = messageText.split(" ");
                             newText += text[0];
@@ -216,8 +214,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                             } catch (IOException | TelegramApiException e) {
                                 e.printStackTrace(); // Handle the exceptions appropriately
                             }
-                        }
-                        else{
+                        } else {
                             listOfCommands.put(chatID, messageText);
                             SendMessage newMessage = new SendMessage();
                             newMessage.setChatId(chatID);
@@ -225,8 +222,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                             sendMessage(newMessage);
                         }
 
-                    }
-                    else if (timeMatcher.matches()) {
+                    } else if (timeMatcher.matches()) {
                         if (listOfRoomCommands.containsKey(chatID)) {
                             System.out.println("I got to the first");
                             String[] time = messageText.split(" ");
@@ -296,8 +292,9 @@ public class TelegramBot extends TelegramLongPollingBot {
 //                                    Student student1 = bookingController.getStudentByFirstName(
 //                                            update.getMessage().getChat().getFirstName());
 
-                                    if(isAvailable){
-                                        Booking booking = new Booking(updid, student1, room, startDateTime, endDateTime);
+                                    if (isAvailable) {
+                                        Booking booking =
+                                                new Booking(updid, student1, room, startDateTime, endDateTime);
                                         Booking newBooking = bookingController.createBooking(booking);
                                         SendMessage response = new SendMessage();
                                         response.setChatId(chatID);
@@ -305,8 +302,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                                         sendMessage(response);
                                         viewCommandReceived(chatID, update.getMessage().getChat().getFirstName(),
                                                 update.getMessage().getChat().getLastName());
-                                    }
-                                    else{
+                                    } else {
                                         sendMessage(chatID, "The time you entered conflicts with " +
                                                 "other bookings.");
                                     }
@@ -316,8 +312,7 @@ public class TelegramBot extends TelegramLongPollingBot {
                                     invalidCommandReceived(chatID);
 
                             }
-                        }
-                        else {
+                        } else {
                             String[] time = messageText.split(" ");
                             System.out.println("I got to the second " + time.length);
                             if (time.length != 2) {
@@ -403,8 +398,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
                             }
                         }
-                    }
-                    else {
+                    } else {
                         invalidCommandReceived(chatID);
                     }
             }
@@ -604,6 +598,7 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
 
     }
+
     public SendMessage getLastSentMessage() {
         return lastSentMessage;
     }
