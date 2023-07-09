@@ -6,8 +6,8 @@ build:
   stage: build
   image: openjdk:17-jdk
   script:
-    - apt-get update -y
-    - apt-get install -y maven
+    - apk update
+    - apk add maven
     - cd university-booking-bot
     - mvn clean compile
 
@@ -15,7 +15,7 @@ test:
   stage: test
   image: openjdk:17-jdk
   script:
-    - apt-get update -y
-    - apt-get install -y maven
+    - apk update
+    - apk add maven
     - cd university-booking-bot
     - mvn test
