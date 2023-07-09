@@ -17,6 +17,7 @@
 		<java.version>17</java.version>
 		<telegram.version>6.7.0</telegram.version>
 		<swagger.version>2.9.2</swagger.version>
+		<sonar.qualitygate.wait>true</sonar.qualitygate.wait>
 	</properties>
 	<dependencies>
 		<dependency>
