@@ -5,8 +5,6 @@ variables:
   SONAR_TOKEN: "sqp_ddd17c2505e8f7867fbd89e9e10832a125994da7"
   SONAR_HOST_URL: "http://localhost:9000"
   SONAR_PROJECT_KEY: "<sonarqube_project_key>"
-  SONAR_PROJECT_NAME: "<sonarqube_project_name>"
-  SONAR_PROJECT_VERSION: "<sonarqube_project_version>"
 
 
 stages:
