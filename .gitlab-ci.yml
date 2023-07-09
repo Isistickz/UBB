@@ -4,14 +4,14 @@ stages:
 
 build:
   stage: build
-  image: adoptopenjdk:17-jdk-hotspot
+  image: openjdk:17-jdk
   script:
     - cd university-booking-bot
     - mvn clean compile
 
 test:
   stage: test
-  image: adoptopenjdk:17-jdk-hotspot
+  image: openjdk:17-jdk
   script:
     - cd university-booking-bot
     - mvn test
