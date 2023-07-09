@@ -41,12 +41,13 @@ public class TelegramBot extends TelegramLongPollingBot {
     private HashMap<Long, String> listOfCommands = new HashMap<>();
     private HashMap<Long, String> listOfRoomCommands = new HashMap<>();
     final BotConfiguration botConfiguration;
+    SendMessage lastSentMessage;
 
     @Autowired
-    private BookingController bookingController;
+    protected BookingController bookingController;
 
     @Autowired
-    private FormScheduleImageGenerator formScheduleImageGenerator;
+    protected FormScheduleImageGenerator formScheduleImageGenerator;
 
     public TelegramBot(BotConfiguration botConfiguration) {
         this.botConfiguration = botConfiguration;
@@ -149,6 +150,7 @@ public class TelegramBot extends TelegramLongPollingBot {
 
 
             Student student = bookingController.getStudentByTelegramID(telegramID);
+
 
             if (student == null) {
                 unvalidatedCommandReceived(chatID);
@@ -577,24 +579,32 @@ public class TelegramBot extends TelegramLongPollingBot {
         }
     }
 
-    private void sendMessage(long chatID, String textToSend) {
+    public boolean sendMessage(long chatID, String textToSend) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatID);
         sendMessage.setText(textToSend);
+        boolean value = false;
 
         try {
             execute(sendMessage);
+            lastSentMessage = sendMessage;
+            value = true;
         } catch (TelegramApiException e) {
-
+            lastSentMessage = sendMessage;
         }
+        return value;
     }
 
-    private void sendMessage(SendMessage message) {
+    void sendMessage(SendMessage message) {
         try {
             execute(message);
+            lastSentMessage = message;
         } catch (TelegramApiException e) {
-
+            System.out.println("Error");
         }
 
+    }
+    public SendMessage getLastSentMessage() {
+        return lastSentMessage;
     }
 }

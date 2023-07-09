@@ -81,7 +81,7 @@ public class BookingController {
         return bookingService.getAllBookings();
     }
 
-    @PostMapping("/bookings")
+    @PostMapping("/bookings/put")
     public Booking createBooking(@RequestBody Booking booking) {
         return bookingService.saveBooking(booking);
     }
