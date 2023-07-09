@@ -25,6 +25,6 @@ test:
 
 deploy:
   stage: deploy
-  image: adoptopenjdk:17-jre
+  image: maven:3.8.3-openjdk-17-slim
   script:
     - java -jar target/*.jar
