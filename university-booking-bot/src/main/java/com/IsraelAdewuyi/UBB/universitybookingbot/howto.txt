@@ -38,3 +38,14 @@ filter by capacity
 No limit in advanced
 Notifications
 Confirmation of active booking (Scheduling messages for Telegram Bot) Quartz, ChromeJon library
+
+
+
+
+COMPLETED. 1. Year is redundant, MM:DD
+COMPLETED. 2. After booking, list of room disappears and display cancel or edit the booking
+COMPLETED. 3. Sync booking_time with current time
+COMPLETED. 4. Restriction on student booking time
+5. in the book by room feature, display the current bookings so the user can pick the date they want to book
+COMPLETED. 6. After cancelling a booking, display the updated list of bookings... same after placing a booking
+COMPLETED. 7. RegEx to parse the date and time received

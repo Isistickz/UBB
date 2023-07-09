@@ -1,6 +1,6 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Configuration;
 
-import com.IsraelAdewuyi.UBB.universitybookingbot.Service.TelegramBot;
+import com.IsraelAdewuyi.UBB.universitybookingbot.Core.TelegramBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -15,14 +15,13 @@ public class BotInitializer {
     TelegramBot myBot;
 
     @EventListener({ContextRefreshedEvent.class})
-    public void init() throws TelegramApiException{
+    public void init() throws TelegramApiException {
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
 
-        try{
+        try {
             telegramBotsApi.registerBot(myBot);
 
-        }
-        catch (TelegramApiException e){
+        } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
 

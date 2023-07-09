@@ -1,4 +1,5 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Service;
+
 import com.IsraelAdewuyi.UBB.universitybookingbot.Entity.Room;
 import com.IsraelAdewuyi.UBB.universitybookingbot.Repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class RoomService {
         roomRepository.deleteById(id);
     }
 
-    public Room getRoomByRoomName(String roomName){
+    public Room getRoomByRoomName(String roomName) {
         return roomRepository.findByRoomName(roomName);
     }
 }

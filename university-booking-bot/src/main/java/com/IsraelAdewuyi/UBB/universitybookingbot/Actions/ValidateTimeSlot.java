@@ -1,23 +1,20 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Actions;
 
-import com.IsraelAdewuyi.UBB.universitybookingbot.Models.Reservation;
-import jakarta.validation.constraints.Null;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class ValidateTimeSlot {
-    public static boolean validateTimeDuration(String timeDuration) {
+    public static String validateTimeDuration(String timeDuration) {
         String[] parts = timeDuration.split(" - ");
 
         if (parts.length != 2) {
-            return false;
+            return "invalid";
         }
 
-        System.out.println("Got here");
+//        System.out.println("Got here " + parts[0] + " " + parts[1]);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd HH:mm");
 
         try {
             LocalDateTime startDateTime = LocalDateTime.parse(parts[0], formatter);
@@ -26,25 +23,25 @@ public class ValidateTimeSlot {
             String formattedDateTime = startDateTime.format(formatter);
             String formattedEndTime = endDateTime.format(formatter);
 
-            System.out.println(formattedDateTime + " " +  formattedEndTime);
+//            System.out.println(formattedDateTime + " " +  formattedEndTime);
 
-            return startDateTime.isBefore(endDateTime);
+            LocalDateTime currentTime = LocalDateTime.now();
+
+            boolean validStartTime = startDateTime.isAfter(currentTime) || startDateTime.isEqual(currentTime);
+
+            if (startDateTime.isBefore(endDateTime) && validStartTime) {
+                return "valid";
+            } else if (!validStartTime) {
+                return "curTime";
+            } else if (!startDateTime.isBefore(endDateTime)) {
+                return "startTimeBeforeEndTime";
+            } else {
+                return "invalid";
+            }
+
+//            return startDateTime.isBefore(endDateTime) && validStartTime;
         } catch (DateTimeParseException e) {
-            return false;
+            return "invalid";
         }
-    }
-
-
-
-
-    public static Reservation getTime(String timeSlot){
-//        int startHour = Integer.parseInt(timeSlot.substring(0, 2));
-//        int startMinute = Integer.parseInt(timeSlot.substring(3, 5));
-//        int endHour = Integer.parseInt(timeSlot.substring(6,8));
-//        int endMinute = Integer.parseInt(timeSlot.substring(9));
-
-//        return new Reservation(startHour, endHour, startMinute, endMinute);
-        LocalDateTime Null = null;
-        return new Reservation(Null, Null);
     }
 }

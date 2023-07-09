@@ -1,6 +1,5 @@
 package com.IsraelAdewuyi.UBB.universitybookingbot.Entity;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -34,12 +33,20 @@ public class Student {
     )
     private String email;
 
+    @Column(
+            name = "telegram_ID",
+            nullable = false,
+            columnDefinition = "TEXT"
+    )
+    private String telegramID;
 
-    public Student(long id, String firstName, String lastName, String email) {
+
+    public Student(long id, String firstName, String lastName, String email, String telegramID) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.telegramID = telegramID;
     }
 
     public Student() {
@@ -76,6 +83,14 @@ public class Student {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTelegramID() {
+        return telegramID;
+    }
+
+    public void setTelegramID(String telegramID) {
+        this.telegramID = telegramID;
     }
 
     @Override
