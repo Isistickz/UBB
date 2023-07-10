@@ -30,18 +30,3 @@ jobs:
           run: |
             cd university-booking-bot
             mvn test
-
-      - name: Install SonarQube Scanner
-        run: |
-          chmod +x sonar_install || true
-          ./sonar_install || true
-
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-
-      - name: SonarQube Analysis
-        run: |
-          cd university-booking-bot
-          mvn verify sonar:sonar -Dsonar.projectKey=university-booking-bot -Dsonar.projectName='university-booking-bot'
