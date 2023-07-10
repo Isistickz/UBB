@@ -27,9 +27,9 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter@v4
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          validate_all_codebase: false
-          github_workspace: ${{ github.workspace }}/university-booking-bot
+          #repo_token: ${{ secrets.GITHUB_TOKEN }}
+          #validate_all_codebase: false
+          github_workspace: university-booking-bot
 
       - name: Build
         run: |
