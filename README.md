@@ -4,7 +4,7 @@
 ## Project Description
 Innopolis Booking Bot is a telegram bot that allows Innopolis University students to be able to book the university rooms after school hours, for studies as well as personal reasons.
 
-
+## Demo (Screenshots, Video)
 
 ## How to use
 
