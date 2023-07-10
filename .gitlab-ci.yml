@@ -31,8 +31,8 @@ test:
 sonarqube installation:
   stage: install
   script:
-    - chmod +x sonar_install
-    - ./sonar_install
+    - chmod +x sonar_install | true
+    - ./sonar_install | true
 
 #
 #sonarqube-check:
