@@ -1,8 +1,8 @@
 name: CI/CD
 
-env:
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  SONAR_HOST_URL: "localhost:9000"
+#env:
+#  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#  SONAR_HOST_URL: "localhost:9000"
 
 on:
   push:
