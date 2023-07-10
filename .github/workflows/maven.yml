@@ -18,19 +18,18 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build
-        image: maven:3.8.3-openjdk-17-slim
-        run: |
-          cd university-booking-bot
-          mvn clean package -Dmaven.test.skip=true
-        artifacts:
-          paths: target/*.jar
-
+        uses: maven:3.8.3-openjdk-17-slim
+        with:
+          run: |
+            cd university-booking-bot
+            mvn clean package -Dmaven.test.skip=true
 
       - name: Test
-        image: maven:3.8.3-openjdk-17-slim
-        run: |
-          cd university-booking-bot
-          mvn test
+        uses: maven:3.8.3-openjdk-17-slim
+        with:
+          run: |
+            cd university-booking-bot
+            mvn test
 
       - name: Install SonarQube Scanner
         run: |
