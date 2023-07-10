@@ -25,6 +25,8 @@ jobs:
 
   build-test:
     runs-on: ubuntu-latest
+    container:
+      image: maven:3.8.3-openjdk-17-slim
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,7 +34,5 @@ jobs:
       - name: Build and Test
         run: |
           cd university-booking-bot
-          apt-get update && apt-get install -y maven
           mvn clean package -Dmaven.test.skip=true
           mvn test
-
