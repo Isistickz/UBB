@@ -14,6 +14,9 @@ Innopolis Booking Bot is a telegram bot that allows Innopolis University student
 ## Project Installation
 
 ## Frameworks or technology
+- Java Spring
+- PostGres
+- Junit and Mockito
 
 ## Getting started
 
