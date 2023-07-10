@@ -33,11 +33,9 @@ jobs:
 
       - name: Build
         run: |
- #        cd ~/university-booking-bot
          mvn clean package -Dmaven.test.skip=true
 
       - name: Test
         run: |
-#         cd ~/university-booking-bot
-          mvn test
+           mvn test
 
