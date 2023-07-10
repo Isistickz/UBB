@@ -29,7 +29,7 @@ test:
     - mvn test
 
 sonarqube installation:
-  stage: installation
+  stage: install
   script:
     - chmod +x sonar_install
     - ./sonar_install
