@@ -1,5 +1,9 @@
 name: CI/CD
 
+# env:
+#   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#   SONAR_HOST_URL: "localhost:9000"
+
 on:
   push:
     branches:
@@ -8,6 +12,9 @@ on:
 jobs:
   build-test-sonar:
     runs-on: ubuntu-latest
+
+    container:
+      image: maven:3.8.3-openjdk-17-slim
 
     steps:
       - name: Checkout code
@@ -22,14 +29,6 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           validate_all_codebase: false
           github_workspace: university-booking-bot
-
-  build-test:
-    runs-on: ubuntu-latest
-    container:
-      image: maven:3.8.3-openjdk-17-slim
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
 
       - name: Build and Test
         run: |
