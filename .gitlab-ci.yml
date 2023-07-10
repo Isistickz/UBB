@@ -27,6 +27,11 @@ test:
     - cd university-booking-bot
     - mvn test
 
+sonarqube installation:
+  stage: installation
+  script:
+    - ./sonar_install
+
 sonarqube-check:
   image: maven:3.8.3-openjdk-17-slim
   variables:
