@@ -22,7 +22,7 @@ jobs:
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
-          path: ~/university-booking-bot/*
+          path: university-booking-bot
 
       - name: Lint Code Base
         uses: github/super-linter@v4
@@ -33,26 +33,11 @@ jobs:
 
       - name: Build
         run: |
-          cd ~/university-booking-bot
+ #        cd ~/university-booking-bot
           mvn clean package -Dmaven.test.skip=true
 
       - name: Test
         run: |
-          cd ~/university-booking-bot
+#         cd ~/university-booking-bot
           mvn test
-
-  #    - name: Install SonarQube Scanner
- #       run: |
-   #       chmod +x sonar_install || true
-  #        ./sonar_install || true
-
-     # - name: Setup Java
-     #   uses: actions/setup-java@v2
-     #   with:
-     #     java-version: '17'
-
-     # - name: SonarQube Analysis
-     #   run: |
-     #     cd university-booking-bot
-     #     mvn verify sonar:sonar -Dsonar.projectKey=university-booking-bot -Dsonar.projectName='university-booking-bot'
 
