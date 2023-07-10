@@ -19,10 +19,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          # Full git history is needed to get a proper list of changed files within `super-linter`
-          fetch-depth: 0
-          path: ~/university-booking-bot
+#        with:
+#          # Full git history is needed to get a proper list of changed files within `super-linter`
+#          fetch-depth: 0
+#          path: ~/university-booking-bot
 
       - name: Lint Code Base
         uses: github/super-linter@v4
