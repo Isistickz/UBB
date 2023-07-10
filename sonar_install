@@ -4,8 +4,8 @@
 SONAR_VERSION="8.9.2.46101"
 
 # Download and install OpenJDK
-sudo apt-get update
-sudo apt-get install -y openjdk-11-jdk
+sudo apt-get update | true
+sudo apt-get install -y openjdk-11-jdk | true
 
 # Download SonarQube
 wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-$SONAR_VERSION.zip
