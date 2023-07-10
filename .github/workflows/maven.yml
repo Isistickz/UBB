@@ -22,7 +22,7 @@ jobs:
         with:
           # Full git history is needed to get a proper list of changed files within `super-linter`
           fetch-depth: 0
-          path: university-booking-bot
+          path: ~/university-booking-bot
 
       - name: Lint Code Base
         uses: github/super-linter@v4
@@ -34,7 +34,7 @@ jobs:
       - name: Build
         run: |
  #        cd ~/university-booking-bot
-          mvn clean package -Dmaven.test.skip=true
+         mvn clean package -Dmaven.test.skip=true
 
       - name: Test
         run: |
