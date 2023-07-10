@@ -13,16 +13,13 @@ jobs:
   build-test-sonar:
     runs-on: ubuntu-latest
 
-    container:
-      image: maven:3.8.3-openjdk-17-slim
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-#        with:
-#          # Full git history is needed to get a proper list of changed files within `super-linter`
-#          fetch-depth: 0
-#          path: ~/university-booking-bot
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+          path: ~/university-booking-bot
 
       - name: Lint Code Base
         uses: github/super-linter@v4
@@ -31,6 +28,9 @@ jobs:
           #validate_all_codebase: false
           github_workspace: university-booking-bot
 
+    container:
+      image: maven:3.8.3-openjdk-17-slim
+      
       - name: Build
         run: |
          mvn clean package -Dmaven.test.skip=true
