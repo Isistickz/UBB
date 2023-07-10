@@ -33,7 +33,7 @@ jobs:
       
       - name: Build
         run: |
-         mvn clean package -Dmaven.test.skip=true
+         mvn clean package -Dmaven.test.skip=true -e
 
       - name: Test
         run: |
