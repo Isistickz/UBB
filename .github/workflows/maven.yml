@@ -1,16 +1,12 @@
 name: CI/CD
 
-# env:
-#   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#   SONAR_HOST_URL: "localhost:9000"
-
 on:
   push:
     branches:
       - main
 
 jobs:
-  build-test-sonar:
+  SuperLint:
     runs-on: ubuntu-latest
 
     container:
@@ -30,8 +26,12 @@ jobs:
           validate_all_codebase: false
           github_workspace: university-booking-bot
 
-      - name: Build and Test
+      - name: Build
         run: |
           cd university-booking-bot
           mvn clean package -Dmaven.test.skip=true
+          
+      - name: Test
+        run: |
+          cd university-booking-bot
           mvn test
