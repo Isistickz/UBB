@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# SonarQube version to install
+SONAR_VERSION="8.9.2.46101"
+
+# Download and install OpenJDK
+sudo apt-get update
+sudo apt-get install -y openjdk-11-jdk
+
+# Download SonarQube
+wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-$SONAR_VERSION.zip
+unzip sonarqube-$SONAR_VERSION.zip
+sudo mv sonarqube-$SONAR_VERSION /opt/sonarqube
+
+# Create a system user for SonarQube
+sudo useradd -r sonarqube -d /opt/sonarqube
+
+# Set the proper permissions
+sudo chown -R sonarqube:sonarqube /opt/sonarqube
+
+# Configure SonarQube as a system service
+sudo tee /etc/systemd/system/sonarqube.service > /dev/null <<EOT
+[Unit]
+Description=SonarQube service
+After=syslog.target network.target
+
+[Service]
+Type=forking
+ExecStart=/opt/sonarqube/bin/linux-x86-64/sonar.sh start
+ExecStop=/opt/sonarqube/bin/linux-x86-64/sonar.sh stop
+User=sonarqube
+Group=sonarqube
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOT
+
+# Reload system services
+sudo systemctl daemon-reload
+
+# Start SonarQube service
+sudo systemctl start sonarqube
+
+# Enable SonarQube to start on system boot
+sudo systemctl enable sonarqube
+
+# Print installation status and access URL
+echo "SonarQube $SONAR_VERSION has been installed successfully!"
+echo "Access SonarQube at http://localhost:9000"
