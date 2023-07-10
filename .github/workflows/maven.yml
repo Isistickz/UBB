@@ -10,8 +10,9 @@ on:
       - main
 
 jobs:
-  build:
+  build-test-sonar:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -21,51 +22,15 @@ jobs:
           cd university-booking-bot
           mvn clean package -Dmaven.test.skip=true
 
-      - name: Save Jar Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: JAR
-          path: university-booking-bot/target/*.jar
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
       - name: Test
         run: |
           cd university-booking-bot
           mvn test
 
-  sonarqube:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
-
       - name: Install SonarQube Scanner
         run: |
           chmod +x sonar_install || true
           ./sonar_install || true
-
-      - name: Setup Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: '17'
-
-      - name: SonarQube Analysis
-        run: |
-          cd university-booking-bot
-          mvn verify sonar:sonar -Dsonar.projectKey=university-booking-bot -Dsonar.projectName='university-booking-bot'
-
-  sonarqube-check:
-    needs: sonarqube
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
 
       - name: Setup Java
         uses: actions/setup-java@v2
