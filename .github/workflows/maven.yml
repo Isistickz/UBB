@@ -17,8 +17,18 @@ jobs:
       image: maven:3.8.3-openjdk-17-slim
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+          path: ${{ github.workspace }}/university-booking-bot/*
+
+      - name: Lint Code Base
+        uses: github/super-linter@v4
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build
         run: |
@@ -44,3 +54,4 @@ jobs:
         run: |
           cd university-booking-bot
           mvn verify sonar:sonar -Dsonar.projectKey=university-booking-bot -Dsonar.projectName='university-booking-bot'
+
